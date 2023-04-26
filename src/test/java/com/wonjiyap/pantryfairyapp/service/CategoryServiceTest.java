@@ -32,7 +32,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void cannotCreateCategoryWithDuplicatedName() {
+    public void cannotCreateCategoryWithDuplicatedName() throws Exception {
         Category category = new Category("category");
         categoryService.saveCategory(category);
 
@@ -49,12 +49,13 @@ public class CategoryServiceTest {
         Long savedCategoryId = categoryService.saveCategory(category);
 
         Category findCategory = categoryService.findOne(savedCategoryId);
-
         assertThat(findCategory.getName()).isEqualTo("category");
 
         categoryService.updateCategory(savedCategoryId, "new name");
+        em.flush();
 
-        assertThat(findCategory.getName()).isEqualTo("new name");
+        Category updatedCategory = categoryService.findOne(savedCategoryId);
+        assertThat(updatedCategory.getName()).isEqualTo("new name");
     }
 
     @Test
@@ -72,7 +73,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void canDeleteCategoryHasItem() {
+    public void canDeleteCategoryHasItem() throws Exception {
         Category category = new Category("category");
         categoryService.saveCategory(category);
 

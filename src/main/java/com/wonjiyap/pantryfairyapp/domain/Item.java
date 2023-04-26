@@ -60,24 +60,28 @@ public class Item extends BaseEntity {
         }
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setStore(String store) {
-        this.store = store;
-    }
-
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public void update(String name,
+                       String description,
+                       String store,
+                       int quantity,
+                       boolean isActive,
+                       Category category) {
+        this.name = name;
+        this.description = description;
+        this.store = store;
+        this.quantity = quantity;
+        this.isActive = isActive;
+        if (category != null) {
+            changeCategory(category);
+        }
     }
 
     //== 연관관계 메서드 ==//
