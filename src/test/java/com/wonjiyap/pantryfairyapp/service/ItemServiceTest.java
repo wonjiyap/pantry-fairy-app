@@ -11,6 +11,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -28,6 +30,28 @@ public class ItemServiceTest {
     public void beforeEach() {
         category = new Category("category");
         categoryService.saveCategory(category);
+    }
+
+    @Test
+    public void canSearchItems() {
+        Item item1 = new Item("item one", category);
+        Item item2 = new Item("item two", category);
+        Item item3 = new Item("item one plus two", category);
+        itemService.saveItem(item1);
+        itemService.saveItem(item2);
+        itemService.saveItem(item3);
+
+        List<Item> searched1 = itemService.findSearchedItems("item");
+        assertThat(searched1.size()).isEqualTo(3);
+
+        List<Item> searched2 = itemService.findSearchedItems("two");
+        assertThat(searched2.size()).isEqualTo(2);
+
+        List<Item> searched3 = itemService.findSearchedItems("plus");
+        assertThat(searched3.size()).isEqualTo(1);
+
+        List<Item> searched4 = itemService.findSearchedItems(null);
+        assertThat(searched4.size()).isEqualTo(3);
     }
 
     @Test

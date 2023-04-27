@@ -45,6 +45,28 @@ public class ItemRepositoryTest {
     }
 
     @Test
+    public void canSearchItemList() {
+        Item item1 = new Item("item one", category);
+        Item item2 = new Item("item two", category);
+        Item item3 = new Item("item one plus two", category);
+        itemRepository.save(item1);
+        itemRepository.save(item2);
+        itemRepository.save(item3);
+
+        List<Item> searched1 = itemRepository.findByName("item");
+        assertThat(searched1.size()).isEqualTo(3);
+
+        List<Item> searched2 = itemRepository.findByName("one");
+        assertThat(searched2.size()).isEqualTo(2);
+
+        List<Item> searched3 = itemRepository.findByName("plus");
+        assertThat(searched3.size()).isEqualTo(1);
+
+        List<Item> searched4 = itemRepository.findByName(null);
+        assertThat(searched4.size()).isEqualTo(3);
+    }
+
+    @Test
     public void canCreateItem() {
         Item item1 = new Item("item1", category);
         Item savedItem1 = itemRepository.save(item1);

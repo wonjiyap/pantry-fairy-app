@@ -43,6 +43,13 @@ public class ItemService {
     }
 
     /**
+     * 검색된 품목 조회
+     */
+    public List<Item> findSearchedItems(String name) {
+        return itemRepository.findByName(name);
+    }
+
+    /**
      * 단건 품목 조회
      */
     public Item findOne(Long itemId) {
