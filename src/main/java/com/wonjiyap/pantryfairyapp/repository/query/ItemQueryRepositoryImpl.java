@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.wonjiyap.pantryfairyapp.domain.QItem.item;
+import static com.wonjiyap.pantryfairyapp.domain.QCategory.category;
 import static org.springframework.util.StringUtils.hasText;
 
 public class ItemQueryRepositoryImpl implements ItemQueryRepository {
@@ -21,6 +22,8 @@ public class ItemQueryRepositoryImpl implements ItemQueryRepository {
     public List<Item> findByName(String name) {
         return queryFactory
                 .selectFrom(item)
+                .join(item.category, category)
+                .fetchJoin()
                 .where(itemNameContains(name))
                 .fetch();
     }

@@ -136,7 +136,7 @@ public class ItemRepositoryTest {
 
         Item findItem = itemRepository.findById(savedItem.getId()).get();
 
-        findItem.update("new name", "new description", "new store", 5, findItem.isActive(), category2);
+        findItem.update("new name", "new description", "new store", 5, findItem.getIsActive(), category2);
 
         assertThat(findItem.getName()).isEqualTo("new name");
         assertThat(findItem.getDescription()).isEqualTo("new description");

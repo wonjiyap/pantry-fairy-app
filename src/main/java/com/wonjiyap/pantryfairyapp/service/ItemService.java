@@ -2,6 +2,8 @@ package com.wonjiyap.pantryfairyapp.service;
 
 import com.wonjiyap.pantryfairyapp.domain.Category;
 import com.wonjiyap.pantryfairyapp.domain.Item;
+import com.wonjiyap.pantryfairyapp.dto.item.UpdateItemRequest;
+import com.wonjiyap.pantryfairyapp.repository.CategoryRepository;
 import com.wonjiyap.pantryfairyapp.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import java.util.List;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final CategoryRepository categoryRepository;
 
 
     /**
@@ -61,17 +64,21 @@ public class ItemService {
      */
     @Transactional
     public Item updateItem(Long itemId,
-                           String name,
-                           String description,
-                           String store,
-                           int quantity,
-                           boolean isActive,
-                           Category category) {
+                           UpdateItemRequest request) {
         Item item = itemRepository.findById(itemId).orElse(null);
         if (item == null) {
             throw new IllegalStateException("품목을 찾을 수 없습니다.");
         }
-        item.update(name, description, store, quantity, isActive, category);
+        Category category = (request.getCategoryId() == null) ? item.getCategory() : categoryRepository.findById(request.getCategoryId()).orElse(null);
+        if (category == null) {
+            throw new IllegalStateException("카데고리를 찾을 수 없습니다.");
+        }
+        item.update(request.getName(),
+                request.getDescription(),
+                request.getStore(),
+                request.getQuantity(),
+                request.getIsActive(),
+                category);
         return item;
     }
 

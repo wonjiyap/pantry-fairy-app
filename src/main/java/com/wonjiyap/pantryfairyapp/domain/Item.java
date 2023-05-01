@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Audited
 @Getter
+@DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "name", "description", "store"})
 @Table(uniqueConstraints = {
@@ -33,10 +35,10 @@ public class Item extends BaseEntity {
     private String store;
 
     @ColumnDefault("0")
-    private int quantity;
+    private Integer quantity;
 
     @ColumnDefault("true")
-    private boolean isActive;
+    private Boolean isActive;
 
     @NotAudited
     @ManyToOne(fetch = FetchType.LAZY)
@@ -71,14 +73,14 @@ public class Item extends BaseEntity {
     public void update(String name,
                        String description,
                        String store,
-                       int quantity,
-                       boolean isActive,
+                       Integer quantity,
+                       Boolean isActive,
                        Category category) {
-        this.name = name;
-        this.description = description;
-        this.store = store;
-        this.quantity = quantity;
-        this.isActive = isActive;
+        if (name != null) { this.name = name; }
+        if (description != null) { this.description = description; }
+        if (store != null) { this.store = store; }
+        if (quantity != null) { this.quantity = quantity; }
+        if (isActive != null) { this.isActive = isActive; }
         if (category != null) {
             changeCategory(category);
         }

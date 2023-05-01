@@ -2,6 +2,7 @@ package com.wonjiyap.pantryfairyapp.service;
 
 import com.wonjiyap.pantryfairyapp.domain.Category;
 import com.wonjiyap.pantryfairyapp.domain.Item;
+import com.wonjiyap.pantryfairyapp.dto.item.UpdateItemRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,14 +84,11 @@ public class ItemServiceTest {
         Item item = new Item("item", category);
         Long savedItemId = itemService.saveItem(item);
 
-        itemService.updateItem(savedItemId,
-                "new item",
-                item.getDescription(),
-                item.getStore(),
-                15,
-                item.isActive(),
-                item.getCategory());
-        em.flush();
+        UpdateItemRequest request =  new UpdateItemRequest();
+        request.setName("new item");
+        request.setQuantity(15);
+
+        itemService.updateItem(savedItemId, request);
 
         Item updatedItem = itemService.findOne(savedItemId);
 
