@@ -52,7 +52,7 @@ public class Item extends BaseEntity {
         }
     }
 
-    public Item(String name, String description, String store, int quantity, Category category) {
+    public Item(String name, String description, String store, Integer quantity, Category category) {
         this.name = name;
         this.description = description;
         this.store = store;
@@ -62,11 +62,11 @@ public class Item extends BaseEntity {
         }
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
-    public void setIsActive(boolean isActive) {
+    public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
     }
 

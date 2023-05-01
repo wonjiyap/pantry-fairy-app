@@ -2,8 +2,6 @@ package com.wonjiyap.pantryfairyapp.controller;
 
 import com.wonjiyap.pantryfairyapp.domain.Category;
 import com.wonjiyap.pantryfairyapp.domain.Item;
-import com.wonjiyap.pantryfairyapp.dto.category.CategoryDto;
-import com.wonjiyap.pantryfairyapp.dto.category.UpdateCategoryRequest;
 import com.wonjiyap.pantryfairyapp.dto.item.CreateItemRequest;
 import com.wonjiyap.pantryfairyapp.dto.item.CreateItemResponse;
 import com.wonjiyap.pantryfairyapp.dto.item.ItemDto;
@@ -11,6 +9,7 @@ import com.wonjiyap.pantryfairyapp.dto.item.UpdateItemRequest;
 import com.wonjiyap.pantryfairyapp.service.CategoryService;
 import com.wonjiyap.pantryfairyapp.service.ItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.history.Revisions;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,7 +28,7 @@ public class ItemController {
     public List<ItemDto> getItems(@RequestParam Optional<String> name) {
         List<Item> items = itemService.findSearchedItems(name.orElse(null));
         return items.stream()
-                .map(ItemDto::new)
+                .map(item -> new ItemDto(item, null))
                 .collect(Collectors.toList());
     }
 
@@ -49,7 +48,8 @@ public class ItemController {
     @GetMapping("/api/v1/items/{itemId}")
     public ItemDto getItem(@PathVariable("itemId") Long itemId) {
         Item item = itemService.findOne(itemId);
-        return new ItemDto(item);
+        Revisions<Integer, Item> histories = itemService.findHistory(itemId);
+        return new ItemDto(item, histories.getContent());
     }
 
     @PatchMapping("/api/v1/items/{itemId}")
@@ -57,7 +57,7 @@ public class ItemController {
                                       @RequestBody @Valid UpdateItemRequest request) {
         itemService.updateItem(itemId, request);
         Item item = itemService.findOne(itemId);
-        return new ItemDto(item);
+        return new ItemDto(item, null);
     }
 
     @DeleteMapping("/api/v1/items/{itemId}")

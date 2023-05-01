@@ -6,6 +6,7 @@ import com.wonjiyap.pantryfairyapp.dto.item.UpdateItemRequest;
 import com.wonjiyap.pantryfairyapp.repository.CategoryRepository;
 import com.wonjiyap.pantryfairyapp.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.history.Revisions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +58,13 @@ public class ItemService {
      */
     public Item findOne(Long itemId) {
         return itemRepository.findById(itemId).orElse(null);
+    }
+
+    /**
+     * 변경 이력 조회
+     */
+    public Revisions<Integer, Item> findHistory(Long itemId) {
+        return itemRepository.findRevisions(itemId);
     }
 
     /**
